@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows;
 using HostelProject.mvvm.model;
 using HostelProject.mvvm.view;
+using Type = HostelProject.mvvm.model.Type;
 
 namespace HostelProject.mvvm.viewmodel
 {
@@ -93,18 +94,16 @@ namespace HostelProject.mvvm.viewmodel
         public MainPageVM()
         {
             // получение списка абонементов для фильтра
-            
             AllRooms = new ObservableCollection<Room>(RoomRepository.Instance.GetAllRooms());
-            AllRooms.Insert(0, new Room { Id = 0, RoomNumber = 0});
+            AllRooms.Insert(0, new Room { Id = 0, RoomNumber = "Все номера"});
             SelectedRoom = AllRooms[0];
 
 
             // получение списка всех клиентов
-            string sql = "SELECT g.name, g.secondname, g.room_id, g.in_date, g.out_date, r.room_number as room_number FROM guests g, rooms r WHERE g.room_id = r.room_id;";
+            string sql = "SELECT g.guest_id, g.name, g.secondname, g.phone_number, g.room_id, g.in_date, g.out_date, r.room_number as room_number FROM guests g, rooms r WHERE g.room_id = r.room_id AND g.out_date Is NULL;";
             Guests = new ObservableCollection<Guest>(GuestRepository.Instance.GetAllGuests(sql));
 
-            // получение списка всех тренеров
-            string sql1 = "SELECT c.coachID as id, c.FIO, c.typeActivitiesID, c.phone_number, t.title as typeActivities from coaches c, typeActivities t where c.typeActivitiesID = t.typeActivitiesID and c.tag = 0 ORDER BY id;";
+            // получение списка всех тренеро
             Rooms = new ObservableCollection<Room>(RoomRepository.Instance.GetAllRooms());
 
             // получение списка всех видов абонемента
@@ -125,17 +124,19 @@ namespace HostelProject.mvvm.viewmodel
             });
 
             // команда на удаление клиента 
-            Delete = new VmCommand(() => {
-                if (SelectedGuest == null)
-                    return;
+            //Delete = new VmCommand(() => {
+            //    if (SelectedGuest == null)
+            //        return;
 
-                if (MessageBox.Show("Удаление гостя", "Предупреждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                {
-                    GuestRepository.Instance.Remove(SelectedGuest);
-                    Guests.Remove(SelectedGuest); // удаление клиента из коллекции
+            //    if (MessageBox.Show("Выселение гостя", "Предупреждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            //    {
+            //        GuestRepository.Instance.Remove(SelectedGuest);
+            //        //RoomRepository.Instance.UpdatePeopleCountMinus(SelectedRoom);
+            //        Guests.Remove(SelectedGuest); // удаление клиента из коллекции
+                    
 
-                }
-            });
+            //    }
+            //});
 
             // команда на добаления тренера
             CreateRoom = new VmCommand(() =>

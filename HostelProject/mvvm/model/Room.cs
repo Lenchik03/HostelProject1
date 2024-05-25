@@ -9,7 +9,7 @@ namespace HostelProject.mvvm.model
     public class Room
     {
         public int Id { get; set; }
-        public int RoomNumber { get; set; }
+        public string RoomNumber { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public int CapacityId { get; set; }
         public int TypeId { get; set; }

@@ -14,9 +14,9 @@ namespace HostelProject.mvvm.model
         public string PhoneNumber { get; set; } = string.Empty;
         public int RoomId { get; set; }
         public DateTime InDate { get; set; } = DateTime.Now;
-        public DateTime OutDate { get; set; }
+        public DateTime? OutDate { get; set; }
 
 
-        public int RoomNumber { get; set; } 
+        public string RoomNumber { get; set; } = string.Empty;
     }
 }

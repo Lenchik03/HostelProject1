@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HostelProject.mvvm.viewmodel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,11 @@ namespace HostelProject.mvvm.view
     /// </summary>
     public partial class MainPage : Page
     {
-        public MainPage()
+        public MainPage(MainVM mainVM)
         {
             InitializeComponent();
+            var vm = ((MainPageVM)DataContext);
+            vm.SetMainVM(mainVM);
         }
     }
 }

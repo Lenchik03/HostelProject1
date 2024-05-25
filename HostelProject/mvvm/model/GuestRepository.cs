@@ -42,11 +42,12 @@ namespace HostelProject.mvvm.model
                     guest.Id = id;
                     guest.Name = reader.GetString("name");
                     guest.SecondName = reader.GetString("secondname");
-                    guest.Name = reader.GetString("phone_number");
+                    guest.PhoneNumber = reader.GetString("phone_number");
                     guest.RoomId = reader.GetInt32("room_id");
                     guest.InDate = reader.GetDateTime("in_date");
-                    guest.OutDate = reader.GetDateTime("out_date");
-                    guest.RoomNumber = reader.GetInt32("room_number");
+                    if (!reader.IsDBNull(reader.GetOrdinal("out_date")))
+                        guest.OutDate = reader.GetDateTime("out_date");
+                    guest.RoomNumber = reader.GetString("room_number");
 
                     result.Add(guest);
                 }
@@ -63,15 +64,16 @@ namespace HostelProject.mvvm.model
                 if (connect == null)
                     return;
 
-                int id = MySqlDB.Instance.GetAutoID("clients");
+                int id = MySqlDB.Instance.GetAutoID("guests");
 
-                string sql = "INSERT INTO guests VALUES (0, @name, @secondname, @phone_number, @room_id, @out_date)";
+                string sql = "INSERT INTO guests VALUES (0, @name, @secondname, @phone_number, @room_id, @in_date, @out_date)";
                 using (var mc = new MySqlCommand(sql, connect)) // INSERT - добавление клиентов в БД
                 {
                     mc.Parameters.Add(new MySqlParameter("name", guest.Name));
                     mc.Parameters.Add(new MySqlParameter("secondname", guest.SecondName));
                     mc.Parameters.Add(new MySqlParameter("phone_number", guest.PhoneNumber));
                     mc.Parameters.Add(new MySqlParameter("room_id", guest.RoomId));
+                    mc.Parameters.Add(new MySqlParameter("in_date", guest.InDate));
                     mc.Parameters.Add(new MySqlParameter("out_date", guest.OutDate));
                     mc.ExecuteNonQuery();
                 }
@@ -123,10 +125,21 @@ namespace HostelProject.mvvm.model
                 if (connect == null)
                     return;
 
-                string sql = "DELETE FROM guests WHERE guest_id = '" + guest.Id + "';"; // DELETE - удаление клиента из БД 
-
-                using (var mc = new MySqlCommand(sql, connect))
+                string sql = "UPDATE guests SET out_date = @out_date WHERE guest_id = '" + guest.Id + "';";
+                using (var mc = new MySqlCommand(sql, connect)) // UPDATE - обновление данных о клиенте
+                {
+                    mc.Parameters.Add(new MySqlParameter("out_date", DateTime.Now));
                     mc.ExecuteNonQuery();
+                }
+
+                //string sql1 = "UPDATE rooms SET people_count = @people_count WHERE room_id = '" + room.Id + "';";
+                //using (var mc = new MySqlCommand(sql1, connect)) // UPDATE - обновление данных о клиенте
+                //{
+                //    mc.Parameters.Add(new MySqlParameter("people_count", room.PeopleCount - 1));
+                //    mc.ExecuteNonQuery();
+                //}
+
+
 
             }
             catch (Exception ex)
@@ -141,12 +154,12 @@ namespace HostelProject.mvvm.model
         {
             try
             {
-                string sql = "SELECT g.name, g.secondname, g.room_id, g.in_date, g.out_date, r.room_number as room_number FROM guests g, rooms r WHERE g.room_id = r.room_id";
+                string sql = "SELECT g.guest_id, g.name, g.secondname, g.phone_number, g.room_id, g.in_date, g.out_date, r.room_number as room_number FROM guests g, rooms r WHERE g.room_id = r.room_id AND g.out_date Is NULL";
                 sql += " AND( g.secondname LIKE '%" + searchText + "%'";
                 sql += " OR g.phone_number LIKE '%" + searchText + "%')";
                 if (selectedRoom != null && selectedRoom.Id != 0)
                     sql += " AND g.room_id = " + selectedRoom.Id;
-                sql += " ORDER BY c.clientID;";
+                sql += " ORDER BY g.guest_id;";
 
                 return GetAllGuests(sql);
             }

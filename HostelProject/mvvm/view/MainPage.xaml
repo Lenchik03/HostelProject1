@@ -7,7 +7,7 @@
       xmlns:vm="clr-namespace:HostelProject.mvvm.viewmodel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      DataContext="mainPageVM">
+      DataContext="{DynamicResource mainPageVM}">
 
     <Page.Resources>
         <vm:MainPageVM x:Key="mainPageVM"/>
@@ -27,22 +27,22 @@
                         </StackPanel>
                         <StackPanel Margin="3">
                             <TextBlock Text="Фильтрация по номеру комнаты"/>
-                            <ComboBox DisplayMemberPath="FIO"
+                            <ComboBox DisplayMemberPath="RoomNumber"
             SelectedItem="{Binding SelectedRoom}" 
             ItemsSource="{Binding AllRooms}"/>
                         </StackPanel>
                         
                     </StackPanel>
                     <StackPanel Grid.Row="2">
-                        <ListView ItemsSource="{Binding Guests}" SelectedItem="{Binding SelectedGuests}">
+                        <ListView ItemsSource="{Binding Guests}" SelectedItem="{Binding SelectedGuest}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding Name}"/>
                                     <GridViewColumn Header="Фамилия" DisplayMemberBinding="{Binding SecondName}" />
                                     <GridViewColumn Header="Номер телефона" DisplayMemberBinding="{Binding PhoneNumber}"/>
                                     <GridViewColumn Header="Номер комнаты"  DisplayMemberBinding="{Binding RoomNumber}"/>
-                                    <GridViewColumn Header="Дата вселения" DisplayMemberBinding="{Binding InDate}"/>
-                                    <GridViewColumn Header="Дата выселения" DisplayMemberBinding="{Binding OutDate}"/>
+                                    <GridViewColumn Header="Дата вселения" DisplayMemberBinding="{Binding InDate, StringFormat=dd.MM.yyyy}"/>
+                                    <GridViewColumn Header="Дата выселения" DisplayMemberBinding="{Binding OutDate, StringFormat=dd.MM.yyyy}"/>
 
                                 </GridView>
                             </ListView.View>
@@ -50,7 +50,7 @@
                         <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
                             <Button Content="Добавить гостя" Command="{Binding Create}" Margin="5"/>
                             <Button Content="Редактировать гостя" Command="{Binding Edit}" Margin="5"/>
-                            <Button Content="Удалить гостя" Command="{Binding Delete}" Margin="5"/>
+                            <Button Content="Выселить гостя" Command="{Binding Delete}" Margin="5"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -69,17 +69,12 @@
                                 <GridViewColumn Header="Тип комнаты" DisplayMemberBinding="{Binding Type}"/>
                             </GridView>
                         </ListView.View>
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="Background" Value="{Binding TagTA, Converter={StaticResource convert}}"/>
-
-                            </Style>
-                        </ListView.ItemContainerStyle>
+                        
                     </ListView>
                     <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
-                        <Button Content="Добавить тренера" Command="{Binding CreateRoom}" Margin="5"/>
-                        <Button Content="Редактировать тренера" Command="{Binding EditRoom}" Margin="5"/>
-                        <Button Content="Удалить тренера" Command="{Binding RemoveRoom}" Margin="5"/>
+                        <Button Content="Добавить комнату" Command="{Binding CreateRoom}" Margin="5"/>
+                        <Button Content="Редактировать комнату" Command="{Binding EditRoom}" Margin="5"/>
+                        <Button Content="Удалить комнату" Command="{Binding RemoveRoom}" Margin="5"/>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
@@ -96,9 +91,9 @@
 
                     </ListView>
                     <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
-                        <Button Content="Добавить вид" Command="{Binding CreateType}" Margin="5"/>
-                        <Button Content="Редактировать вид" Command="{Binding EditType}" Margin="5"/>
-                        <Button Content="Удалить вид" Command="{Binding DeleteType}" Margin="5"/>
+                        <Button Content="Добавить тип" Command="{Binding CreateType}" Margin="5"/>
+                        <Button Content="Редактировать тип" Command="{Binding EditType}" Margin="5"/>
+                        <Button Content="Удалить тип" Command="{Binding DeleteType}" Margin="5"/>
                     </StackPanel>
                 </StackPanel>
             </TabItem>

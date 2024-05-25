@@ -4,9 +4,39 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HostelProject"
+        xmlns:vm="clr-namespace:HostelProject.mvvm.viewmodel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Height="450" Width="800"
+        DataContext="{DynamicResource mainVM}">
+    <Window.Resources>
+        <vm:MainVM x:Key="mainVM"/>
+    </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Menu>
+            <!--<MenuItem Header="Поиск" Command="{Binding Search}"/>-->
+
+            <!--<Image  Width="60" Height="60" Margin="5" Source="/mvvm/view/logo.png" PreviewMouseDown="Manager" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=EditClientPage}"/>
+            <Image  Width="60" Height="60" Margin="5" Source="/mvvm/view/logo.png" PreviewMouseDown="Manager" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=EditCoachPage}"/>
+            <Image  Width="60" Height="60" Margin="5" Source="/mvvm/view/logo.png" PreviewMouseDown="Manager" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=ManagerPage}"/>
+            <Image  Width="60" Height="60" Margin="5" Source="/mvvm/view/logo.png" PreviewMouseDown="Manager" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=TypeActivitiesPage}"/>-->
+
+            <!--<MenuItem Header="Главная" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=ManagerPage}" Command="{Binding MainPage}"/>
+        <MenuItem Header="Главная" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=EditClientPage}" Command="{Binding MainPage}"/>
+        <MenuItem Header="Главная" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=EditCoachPage}" Command="{Binding MainPage}"/>-->
+        </Menu>
+
+
+        <!--<Menu HorizontalAlignment="Right">
+            <MenuItem Header="Выйти" Visibility="{Binding CurrentPage, Converter={StaticResource signOutConv}, ConverterParameter=ManagerPage}" Command="{Binding SignOut}" Margin="5,25,5,5"/>
+        </Menu>-->
+        <Frame NavigationUIVisibility="Hidden"
+       Content="{Binding CurrentPage}"
+       Grid.Row="1"/>
 
     </Grid>
 </Window>

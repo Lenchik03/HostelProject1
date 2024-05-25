@@ -29,7 +29,7 @@ namespace HostelProject.mvvm.model
             var connect = MySqlDB.Instance.GetConnection();
             if (connect == null)
                 return result;
-            string sql = "SELECT r.room_id, r.room_number, r.price, r.capacity_id, r.type_id, c.title as capacity, t.title as type FROM rooms r, capasities c, types t WHERE r.capacity_id = c.capacity_id AND r.type_id = t.type_id AND r.del = 0;";
+            string sql = "SELECT r.room_id, r.room_number, r.price, r.capacity_id, r.type_id, r.people_count, r.capacity, c.title as capacitytitle, t.title as type FROM rooms r, capacities c, types t WHERE r.capacity_id = c.capacity_id AND r.type_id = t.type_id AND r.del = 0;";
             using (var mc = new MySqlCommand(sql, connect))
             using (var reader = mc.ExecuteReader())
             {
@@ -41,11 +41,13 @@ namespace HostelProject.mvvm.model
                     var room = new Room();
 
                     room.Id = id;
-                    room.RoomNumber = reader.GetInt32("room_number");
+                    room.RoomNumber = reader.GetString("room_number");
                     room.Price = reader.GetDecimal("price");
                     room.CapacityId = reader.GetInt32("capacity_id");
                     room.TypeId = reader.GetInt32("type_id");
-                    room.Capacity = reader.GetString("capacity");
+                    room.PeopleCount = reader.GetInt32("people_count");
+                    room.Capacity = reader.GetInt32("capacity");
+                    room.CapacityTitle = reader.GetString("capacitytitle");
                     room.Type = reader.GetString("type");
 
                     result.Add(room);
@@ -65,14 +67,16 @@ namespace HostelProject.mvvm.model
 
                 int id = MySqlDB.Instance.GetAutoID("rooms");
 
-                string sql = "INSERT INTO rooms VALUES (0, @room_number, @price, @capacity_id, @type_id, @del)";
+                string sql = "INSERT INTO rooms VALUES (0, @room_number, @price, @capacity_id, @type_id, @people_count, @capacity, @del)";
                 using (var mc = new MySqlCommand(sql, connect)) // INSERT - добавление клиентов в БД
                 {
                     mc.Parameters.Add(new MySqlParameter("room_number", room.RoomNumber));
                     mc.Parameters.Add(new MySqlParameter("price", room.Price));
                     mc.Parameters.Add(new MySqlParameter("capacity_id", room.CapacityId));
                     mc.Parameters.Add(new MySqlParameter("type_id", room.TypeId));
-                    mc.Parameters.Add(new MySqlParameter("del", 0));
+                    mc.Parameters.Add(new MySqlParameter("people_count", room.PeopleCount));
+                    mc.Parameters.Add(new MySqlParameter("capacity", room.Capacity));
+                    mc.Parameters.Add(new MySqlParameter("del", room.Del));
                     mc.ExecuteNonQuery();
                 }
             }
@@ -91,16 +95,18 @@ namespace HostelProject.mvvm.model
                 if (connect == null)
                     return;
 
-
-                string sql = "UPDATE rooms SET room_number = @room_number, price = @price, capacity_id = @capacity_id, type_id = @type_id WHERE room_id = '" + room.Id + "';";
-                using (var mc = new MySqlCommand(sql, connect)) // UPDATE - обновление данных о клиенте
-                {
-                    mc.Parameters.Add(new MySqlParameter("room_number", room.RoomNumber));
-                    mc.Parameters.Add(new MySqlParameter("price", room.Price));
-                    mc.Parameters.Add(new MySqlParameter("capacity_id", room.CapacityId));
-                    mc.Parameters.Add(new MySqlParameter("type_id", room.TypeId));
-                    mc.ExecuteNonQuery();
-                }
+                
+                    string sql = "UPDATE rooms SET room_number = @room_number, price = @price, capacity_id = @capacity_id, type_id = @type_id WHERE room_id = '" + room.Id + "';";
+                    using (var mc = new MySqlCommand(sql, connect)) // UPDATE - обновление данных о клиенте
+                    {
+                        mc.Parameters.Add(new MySqlParameter("room_number", room.RoomNumber));
+                        mc.Parameters.Add(new MySqlParameter("price", room.Price));
+                        mc.Parameters.Add(new MySqlParameter("capacity_id", room.CapacityId));
+                        mc.Parameters.Add(new MySqlParameter("type_id", room.TypeId));
+                        mc.ExecuteNonQuery();
+                    }
+                
+                
             }
             catch (Exception ex)
             {
@@ -141,12 +147,32 @@ namespace HostelProject.mvvm.model
                 if (connect == null)
                     return;
 
-                string sql1 = "UPDATE rooms SET people_count = people_count + 1 WHERE room_id = '"+ room.Id +"';";
+                    string sql1 = "UPDATE rooms SET people_count = people_count + 1 WHERE room_id = '" + room.Id + "';";
+                    using (var mc = new MySqlCommand(sql1, connect)) // INSERT - добавление клиентов в БД
+                    {
+                        mc.ExecuteNonQuery();
+                    }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        internal void UpdatePeopleCountMinus(Room room)
+        {
+            try
+            {
+                var connect = MySqlDB.Instance.GetConnection();
+                if (connect == null)
+                    return;
+
+                string sql1 = "UPDATE rooms SET people_count = @people_count WHERE room_id = '" + room.Id + "';";
                 using (var mc = new MySqlCommand(sql1, connect)) // INSERT - добавление клиентов в БД
                 {
+                    mc.Parameters.Add(new MySqlParameter("people_count", room.PeopleCount - 1));
                     mc.ExecuteNonQuery();
                 }
-
             }
             catch (Exception ex)
             {

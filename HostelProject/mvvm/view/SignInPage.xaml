@@ -4,11 +4,35 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:HostelProject.mvvm.view"
+      xmlns:vm="clr-namespace:HostelProject.mvvm.viewmodel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="SignInPage">
-
+      DataContext="{DynamicResource signinvm}">
+    <Page.Resources>
+        <vm:SignInPageVM x:Key="signinvm"/>
+    </Page.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="300"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="1" Grid.Row="1" Width="300" Margin="0,40,0,10">
+            <Label Content="Авторизация" HorizontalAlignment="Center" FontSize="20" FontFamily="Sitka Small"/>
+            <Label Content="Введите имя пользователя" FontSize="14" Margin="5"/>
+            <TextBox Margin="5" Text="{Binding UserName}"/>
+            <Label Content="Введите пароль" FontSize="14" Margin="5"/>
+            <PasswordBox x:Name="passwrdBox"/>
+
+            <Button Content="Войти" Height="25" Width="80" Margin="10" FontWeight="Bold" Command="{Binding Open}"/>
+            <Button Content="Зарегистрироваться" Height="25" Width="150" Margin="10" FontWeight="Bold" Command="{Binding Registration}"/>
+
+        </StackPanel>
     </Grid>
 </Page>

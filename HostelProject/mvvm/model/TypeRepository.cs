@@ -63,7 +63,7 @@ namespace HostelProject.mvvm.model
                 using (var mc = new MySqlCommand(sql, connect)) // INSERT - добавление клиентов в БД
                 {
                     mc.Parameters.Add(new MySqlParameter("title", type.Title));
-                    mc.Parameters.Add(new MySqlParameter("del", 0));
+                    mc.Parameters.Add(new MySqlParameter("del", type.Del));
                     mc.ExecuteNonQuery();
                 }
             }

@@ -1,4 +1,5 @@
-﻿using HostelProject.mvvm.viewmodel;
+﻿using HostelProject.mvvm.view;
+using HostelProject.mvvm.viewmodel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,7 +25,7 @@ namespace HostelProject
 
         private void Manager(object sender, MouseButtonEventArgs e)
         {
-            MainVM.Instance.CurrentPage = new MainPageVM(MainVM.Instance);
+            MainVM.Instance.CurrentPage = new MainPage(MainVM.Instance);
         }
     }
 }

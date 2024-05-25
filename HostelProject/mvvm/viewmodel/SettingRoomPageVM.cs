@@ -1,4 +1,5 @@
 ﻿using HostelProject.mvvm.model;
+using HostelProject.mvvm.view;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,7 +88,7 @@ namespace HostelProject.mvvm.viewmodel
 
                 }
 
-                mainVM.CurrentPage = new MainPageVM(mainVM); // после успешного добавления или редактирования клиента, откроется страница менеджера
+                mainVM.CurrentPage = new MainPage(mainVM); // после успешного добавления или редактирования клиента, откроется страница менеджера
             });
 
 
@@ -99,7 +100,7 @@ namespace HostelProject.mvvm.viewmodel
             this.mainVM = mainVM;
         }
 
-        internal void SetEditClient(Room selectedRoom)
+        internal void SetEditRoom(Room selectedRoom)
         {
             Room = selectedRoom;
             SelectedCapacity = AllCapacity.FirstOrDefault(s => s.Id == room.CapacityId);

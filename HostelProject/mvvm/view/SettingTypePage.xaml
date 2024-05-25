@@ -4,11 +4,28 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:HostelProject.mvvm.view"
+      xmlns:vm="clr-namespace:HostelProject.mvvm.viewmodel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="SettingTypePage">
-
+      DataContext="{DynamicResource typeVM}">
+    <Page.Resources>
+        <vm:SettingTypePageVM x:Key="typeVM"/>
+    </Page.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="1" Width="400">
+            <StackPanel DataContext="{Binding Type}">
+
+                <Label Content="Название типа комнаты"/>
+                <TextBox Text="{Binding Title}"/>
+
+
+            </StackPanel>
+            <Button Content="Сохранить" Command="{Binding Save}" Width="150" Margin="10"/>
+        </StackPanel>
     </Grid>
 </Page>

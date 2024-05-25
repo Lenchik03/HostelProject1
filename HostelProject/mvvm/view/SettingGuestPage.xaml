@@ -4,11 +4,48 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:HostelProject.mvvm.view"
+      xmlns:vm="clr-namespace:HostelProject.mvvm.viewmodel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="SettingGuestPage">
-
+      DataContext="{DynamicResource guestVM}">
+    <Page.Resources>
+        <vm:SettingGuestPageVM x:Key="guestVM"/>
+    </Page.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="1">
+            <StackPanel DataContext="{Binding Guest}">
+                <Label Content="Имя"/>
+                <TextBox Text="{Binding Name}"/>
+                <Label Content="Фамилия"/>
+                <TextBox Text="{Binding SecondName}"/>
+                <!--<Slider Minimum="0" Maximum="144" Value="{Binding ClassesDays}"/>-->
+                <Label Content="Номер телефона"/>
+                <TextBox Text="{Binding PhoneNumber}"/>
+            </StackPanel>
+            <Label Content="Номер"/>
+            <ComboBox ItemsSource="{Binding AllRooms}" SelectedItem="{Binding SelectedRoom}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+            <Run Text="{Binding RoomNumber}"/>
+            <Run Text=" / "/>
+            <Run Text="{Binding CapacityTitle}"/>
+            <Run Text=" / "/>
+            <Run Text="{Binding Type}"/>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Сохранить" Command="{Binding Save}" Width="70" Margin="5"/>
+            <Button Content="Выселить гостя" Command="{Binding Delete}" Width="100" Margin="5"/>
+            </StackPanel>
+        </StackPanel>
+
     </Grid>
 </Page>

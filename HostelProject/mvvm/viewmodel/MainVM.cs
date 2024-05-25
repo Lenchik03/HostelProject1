@@ -32,12 +32,12 @@ namespace HostelProject.mvvm.viewmodel
         {
             Instance = this;
 
-            CurrentPage = new RegistrationPage(); // по умолчанию открывается страница авторизации
+            CurrentPage = new SignInPage(); // по умолчанию открывается страница авторизации
 
             // команда на открытие страницы авторизации
             SignOut = new VmCommand(() =>
             {
-                CurrentPage = new RegistrationPage();
+                CurrentPage = new SignInPage();
             });
 
             // команда на открытие страницы менеджера 

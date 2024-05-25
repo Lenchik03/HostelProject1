@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HostelProject.mvvm.viewmodel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,8 @@ namespace HostelProject.mvvm.view
         public SignInPage()
         {
             InitializeComponent();
+            var vm = ((SignInPageVM)DataContext);
+            vm.SetPasswordBox(passwrdBox);
         }
     }
 }

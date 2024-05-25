@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HostelProject.mvvm.model;
+using HostelProject.mvvm.view;
 using Type = HostelProject.mvvm.model.Type;
 
 namespace HostelProject.mvvm.viewmodel
@@ -45,7 +46,7 @@ namespace HostelProject.mvvm.viewmodel
                 }
 
                 // после успешного добавления или редактирования вида абонемента откроется страница менеджера
-                mainVM.CurrentPage = new MainPageVM(mainVM);
+                mainVM.CurrentPage = new MainPage(mainVM);
             });
 
 
@@ -57,7 +58,7 @@ namespace HostelProject.mvvm.viewmodel
             this.mainVM = mainVM;
         }
 
-        internal void SetEditTA(Type type)
+        internal void SetEditType(Type type)
         {
             Type = type;
 

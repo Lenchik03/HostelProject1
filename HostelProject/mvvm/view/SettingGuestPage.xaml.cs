@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HostelProject.mvvm.model;
+using HostelProject.mvvm.viewmodel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +22,16 @@ namespace HostelProject.mvvm.view
     /// </summary>
     public partial class SettingGuestPage : Page
     {
-        public SettingGuestPage()
+        public SettingGuestPage(MainVM mainVM)
         {
             InitializeComponent();
+            var vm = ((SettingGuestPageVM)DataContext);
+            vm.SetMainVM(mainVM);
+        }
+
+        public SettingGuestPage(MainVM mainVM, Guest selectedGuest) : this(mainVM)
+        {
+            ((SettingGuestPageVM)DataContext).SetEditGuest(selectedGuest);
         }
     }
 }
