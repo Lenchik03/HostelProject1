@@ -50,39 +50,54 @@ namespace HostelProject.mvvm.viewmodel
                 // если из Combobox`а НЕ выбран абонемент, то по умолчанию будет выбран первый абонемент
                 Guest.RoomId = SelectedRoom?.Id ?? 1;
 
-                if (Guest.Id == 0)
-                {
-                    if (SelectedRoom.PeopleCount < SelectedRoom.Capacity)
+                //if (SelectedRoom == null)
+                //{
+                //    //MessageBox.Show("Укажите номер");
+                //}
+                //else
+                //
+
+                    if (Guest.Id == 0)
                     {
-                        RoomRepository.Instance.UpdatePeopleCount(SelectedRoom);
-                        GuestRepository.Instance.Add(Guest); // добавление клиента
+                        if (SelectedRoom.PeopleCount < SelectedRoom.Capacity)
+                        {
+
+                            RoomRepository.Instance.UpdatePeopleCount(SelectedRoom);
+                            GuestRepository.Instance.Add(Guest); // добавление клиента
+                            mainVM.CurrentPage = new MainPage(mainVM);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Номер занят!!!");
+                            mainVM.CurrentPage = new SettingGuestPage(mainVM, Guest);
+                        }
                     }
+
                     else
-                        MessageBox.Show("Номер занят!!!");
-                }
-                else
-                {                    
-                    GuestRepository.Instance.Update(Guest); // если клиент выбран из списка - редактирование клиента
-
-                }
-
-                mainVM.CurrentPage = new MainPage(mainVM); // после успешного добавления или редактирования клиента, откроется страница менеджера
+                    {
+                        //SelectedRoom.Id = Guest.RoomId;
+                        GuestRepository.Instance.Update(Guest); // если клиент выбран из списка - редактирование клиента
+                        mainVM.CurrentPage = new MainPage(mainVM);
+                    }
+                //}
+                 // после успешного добавления или редактирования клиента, откроется страница менеджера
             });
 
-            Delete = new VmCommand(() => {
-                if (Guest == null)
-                    return;
+            //Delete = new VmCommand(() => {
+            //    if (Guest == null)
+            //        return;
 
-                if (MessageBox.Show("Выселение гостя", "Предупреждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                {
-                    GuestRepository.Instance.Remove(Guest);
-                    RoomRepository.Instance.UpdatePeopleCountMinus(SelectedRoom);
-                    /*Guests.Remove(SelectedGuest);*/ // удаление клиента из коллекции
-                    mainVM.CurrentPage = new MainPage(mainVM);
+            //    if (MessageBox.Show("Выселение гостя", "Предупреждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            //    {
+            //        //SelectedRoom.Id = Guest.RoomId;
+            //        GuestRepository.Instance.Remove(Guest);
+            //        //RoomRepository.Instance.UpdatePeopleCountMinus(SelectedRoom);
+            //        /*Guests.Remove(SelectedGuest);*/ // удаление клиента из коллекции
+            //        mainVM.CurrentPage = new MainPage(mainVM);
 
 
-                }
-            });
+            //    }
+            //});
 
 
         }

@@ -10,6 +10,8 @@
         DataContext="{DynamicResource mainVM}">
     <Window.Resources>
         <vm:MainVM x:Key="mainVM"/>
+        <vm:MainConverter x:Key="pageConv"/>
+        <vm:SignOutConverter x:Key="signOutConv"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -25,15 +27,16 @@
             <Image  Width="60" Height="60" Margin="5" Source="/mvvm/view/logo.png" PreviewMouseDown="Manager" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=ManagerPage}"/>
             <Image  Width="60" Height="60" Margin="5" Source="/mvvm/view/logo.png" PreviewMouseDown="Manager" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=TypeActivitiesPage}"/>-->
 
-            <!--<MenuItem Header="Главная" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=ManagerPage}" Command="{Binding MainPage}"/>
-        <MenuItem Header="Главная" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=EditClientPage}" Command="{Binding MainPage}"/>
-        <MenuItem Header="Главная" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=EditCoachPage}" Command="{Binding MainPage}"/>-->
+            <MenuItem Header="Главная" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=MainPage}" Command="{Binding MainPage}"/>
+        <MenuItem Header="Главная" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=SettingGuestPage}" Command="{Binding MainPage}"/>
+            <MenuItem Header="Главная" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=SettingRoomPage}" Command="{Binding MainPage}"/>
+            <MenuItem Header="Главная" Visibility="{Binding CurrentPage, Converter={StaticResource pageConv}, ConverterParameter=SettingTypePage}" Command="{Binding MainPage}"/>
         </Menu>
 
 
-        <!--<Menu HorizontalAlignment="Right">
-            <MenuItem Header="Выйти" Visibility="{Binding CurrentPage, Converter={StaticResource signOutConv}, ConverterParameter=ManagerPage}" Command="{Binding SignOut}" Margin="5,25,5,5"/>
-        </Menu>-->
+        <Menu HorizontalAlignment="Right">
+            <MenuItem Header="Выйти" Visibility="{Binding CurrentPage, Converter={StaticResource signOutConv}, ConverterParameter=MainPage}" Command="{Binding SignOut}" Margin="5,25,5,5"/>
+        </Menu>
         <Frame NavigationUIVisibility="Hidden"
        Content="{Binding CurrentPage}"
        Grid.Row="1"/>

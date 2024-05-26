@@ -28,7 +28,7 @@ namespace HostelProject.mvvm.model
             var connect = MySqlDB.Instance.GetConnection();
             if (connect == null)
                 return result;
-            string sql = "SELECT type_id, title FROM types;";
+            string sql = "SELECT type_id, title FROM types WHERE del = 0;";
             using (var mc = new MySqlCommand(sql, connect))
             using (var reader = mc.ExecuteReader())
             {
@@ -106,11 +106,19 @@ namespace HostelProject.mvvm.model
                     return;
 
                 // запрос на изменение tag(тренер, которого мы выбираем, помечается удаленным)
-                string sql = "UPDATE rooms SET del = @del WHERE room_id = '" + type.Id + "';";
+                string sql = "UPDATE types SET del = @del WHERE type_id = '" + type.Id + "';";
 
                 using (var mc = new MySqlCommand(sql, connect))
                 {
                     mc.Parameters.Add(new MySqlParameter("del", 1)); // если "0" - не удален, если "1" - удален 
+                    mc.ExecuteNonQuery();
+                }
+
+                string sql1 = "UPDATE rooms SET type_id = @type_id WHERE type_id = '" + type.Id + "';";
+
+                using (var mc = new MySqlCommand(sql1, connect))
+                {
+                    mc.Parameters.Add(new MySqlParameter("type_id", 1)); // если "0" - не удален, если "1" - удален 
                     mc.ExecuteNonQuery();
                 }
 

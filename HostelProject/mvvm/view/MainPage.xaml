@@ -42,7 +42,7 @@
                                     <GridViewColumn Header="Номер телефона" DisplayMemberBinding="{Binding PhoneNumber}"/>
                                     <GridViewColumn Header="Номер комнаты"  DisplayMemberBinding="{Binding RoomNumber}"/>
                                     <GridViewColumn Header="Дата вселения" DisplayMemberBinding="{Binding InDate, StringFormat=dd.MM.yyyy}"/>
-                                    <GridViewColumn Header="Дата выселения" DisplayMemberBinding="{Binding OutDate, StringFormat=dd.MM.yyyy}"/>
+                                    
 
                                 </GridView>
                             </ListView.View>

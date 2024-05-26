@@ -131,6 +131,12 @@ namespace HostelProject.mvvm.model
                     mc.Parameters.Add(new MySqlParameter("del", 1)); // если "0" - не удален, если "1" - удален 
                     mc.ExecuteNonQuery();
                 }
+                string sql1 = "UPDATE guests SET out_date = @out_date WHERE room_id = '" + room.Id + "';";
+                using (var mc = new MySqlCommand(sql1, connect)) // INSERT - добавление клиентов в БД
+                {
+                    mc.Parameters.Add(new MySqlParameter("out_date", DateTime.Now));
+                    mc.ExecuteNonQuery();
+                }
 
             }
             catch (Exception ex)
@@ -166,13 +172,19 @@ namespace HostelProject.mvvm.model
                 var connect = MySqlDB.Instance.GetConnection();
                 if (connect == null)
                     return;
-
+                if (room == null)
+                {
+                    MessageBox.Show("Не возможно выселить гостя");
+                    return;
+                }
                 string sql1 = "UPDATE rooms SET people_count = @people_count WHERE room_id = '" + room.Id + "';";
                 using (var mc = new MySqlCommand(sql1, connect)) // INSERT - добавление клиентов в БД
                 {
                     mc.Parameters.Add(new MySqlParameter("people_count", room.PeopleCount - 1));
                     mc.ExecuteNonQuery();
                 }
+
+                
             }
             catch (Exception ex)
             {

@@ -124,19 +124,20 @@ namespace HostelProject.mvvm.viewmodel
             });
 
             // команда на удаление клиента 
-            //Delete = new VmCommand(() => {
-            //    if (SelectedGuest == null)
-            //        return;
+            Delete = new VmCommand(() =>
+            {
+                if (SelectedGuest == null)
+                    return;
 
-            //    if (MessageBox.Show("Выселение гостя", "Предупреждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            //    {
-            //        GuestRepository.Instance.Remove(SelectedGuest);
-            //        //RoomRepository.Instance.UpdatePeopleCountMinus(SelectedRoom);
-            //        Guests.Remove(SelectedGuest); // удаление клиента из коллекции
-                    
+                if (MessageBox.Show("Выселение гостя", "Предупреждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    GuestRepository.Instance.Remove(SelectedGuest);
+                    //RoomRepository.Instance.UpdatePeopleCountMinus(SelectedRoom);
+                    Guests.Remove(SelectedGuest); // удаление клиента из коллекции
 
-            //    }
-            //});
+
+                }
+            });
 
             // команда на добаления тренера
             CreateRoom = new VmCommand(() =>
@@ -158,10 +159,11 @@ namespace HostelProject.mvvm.viewmodel
                 if (SelectedRoom == null)
                     return;
 
-                if (MessageBox.Show("Удаление тренера", "Предупреждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (MessageBox.Show("Удаление номера", "Предупреждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
 
                     RoomRepository.Instance.Remove(SelectedRoom);
+                    RoomRepository.Instance.UpdatePeopleCountMinus(SelectedRoom);
 
                     // обновление списка тренеров
                     Rooms = new ObservableCollection<Room>(RoomRepository.Instance.GetAllRooms());

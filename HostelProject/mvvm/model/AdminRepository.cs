@@ -60,7 +60,7 @@ namespace HostelProject.mvvm.model
         }
 
         //запрос на добавление менеджера в БД
-        internal void AddManager(Admin admin)
+        internal void Add(Admin admin)
         {
             try
             {

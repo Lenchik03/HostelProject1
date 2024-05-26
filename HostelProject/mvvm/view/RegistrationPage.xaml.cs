@@ -23,6 +23,7 @@ namespace HostelProject.mvvm.view
     {
         public RegistrationPage(MainVM mainVM)
         {
+            InitializeComponent();
             var vm = ((RegistrationPageVM)DataContext);
             vm.SetMainVM(mainVM);
             vm.SetPasswordBox(passwrdBox);

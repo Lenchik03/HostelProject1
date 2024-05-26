@@ -29,7 +29,7 @@ namespace HostelProject.mvvm.viewmodel
             Save = new VmCommand(() =>
             {
                 SelectedAdmin.Password = Password; // присвоение менеджеру нового пароля
-                AdminRepository.Instance.AddManager(SelectedAdmin);
+                AdminRepository.Instance.Add(SelectedAdmin);
 
                 // после успешной регистрации откроется страница авторизации
                 SignInPage signInPage = new SignInPage();

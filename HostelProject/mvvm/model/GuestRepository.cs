@@ -125,6 +125,8 @@ namespace HostelProject.mvvm.model
                 if (connect == null)
                     return;
 
+                if (guest.RoomId == 1)
+                    return;
                 string sql = "UPDATE guests SET out_date = @out_date WHERE guest_id = '" + guest.Id + "';";
                 using (var mc = new MySqlCommand(sql, connect)) // UPDATE - обновление данных о клиенте
                 {
@@ -132,12 +134,12 @@ namespace HostelProject.mvvm.model
                     mc.ExecuteNonQuery();
                 }
 
-                //string sql1 = "UPDATE rooms SET people_count = @people_count WHERE room_id = '" + room.Id + "';";
-                //using (var mc = new MySqlCommand(sql1, connect)) // UPDATE - обновление данных о клиенте
-                //{
-                //    mc.Parameters.Add(new MySqlParameter("people_count", room.PeopleCount - 1));
-                //    mc.ExecuteNonQuery();
-                //}
+                string sql1 = "UPDATE rooms SET people_count = people_count-1 WHERE room_id = '" + guest.RoomId + "';";
+                using (var mc = new MySqlCommand(sql1, connect)) // UPDATE - обновление данных о клиенте
+                {
+                    //mc.Parameters.Add(new MySqlParameter("people_count", room.PeopleCount - 1));
+                    mc.ExecuteNonQuery();
+                }
 
 
 
