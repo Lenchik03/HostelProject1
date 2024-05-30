@@ -9,6 +9,7 @@ using System.Windows;
 using HostelProject.mvvm.model;
 using HostelProject.mvvm.view;
 using Type = HostelProject.mvvm.model.Type;
+using System.Windows.Media;
 
 namespace HostelProject.mvvm.viewmodel
 {
@@ -29,10 +30,15 @@ namespace HostelProject.mvvm.viewmodel
         private MainVM mainVM;
         private string searchText = ""; // текст поиска
         private ObservableCollection<Guest> guests;
+        private ObservableCollection<Guest> allguests;
+        private ObservableCollection<Month> months;
         private ObservableCollection<Room> rooms;
         private ObservableCollection<model.Type> types;
-        public ObservableCollection<Room> AllRooms { get; set; } // список тренеров для фильтра
+        public ObservableCollection<Room> AllRooms { get; set; }
+        public ObservableCollection<Room> AllAllRooms { get; set; }
+        public ObservableCollection<Month> AllMonth { get; set; }// список тренеров для фильтра
         
+
         private Room selectedRoom;
 
 
@@ -44,9 +50,36 @@ namespace HostelProject.mvvm.viewmodel
                 selectedRoom = value;
                 Signal();
                 Search();
+                SearchMonth();
+                SearchOutMonth();
             }
         }
-        
+
+        private Month selectedInMonth;
+
+
+        public Month SelectedInMonth
+        {
+            get => selectedInMonth;
+            set
+            {
+                selectedInMonth = value;
+                Signal();
+                SearchMonth();
+            }
+        }
+        private Month selectedOutMonth;
+        public Month SelectedOutMonth
+        {
+            get => selectedOutMonth;
+            set
+            {
+                selectedOutMonth = value;
+                Signal();
+                SearchOutMonth();
+            }
+        }
+
 
         public string SearchText // текст, по которому мы ищем клиента
         {
@@ -55,6 +88,8 @@ namespace HostelProject.mvvm.viewmodel
             {
                 searchText = value;
                 Search();
+                SearchMonth();
+                SearchOutMonth();
             }
         }
 
@@ -70,6 +105,16 @@ namespace HostelProject.mvvm.viewmodel
             }
         }
 
+        public ObservableCollection<Guest> AllGuests // список клиентов
+        {
+            get => allguests;
+            set
+            {
+                allguests = value;
+                Signal();
+            }
+        }
+
         public ObservableCollection<Room> Rooms // список тренеров
         {
             get => rooms;
@@ -79,6 +124,7 @@ namespace HostelProject.mvvm.viewmodel
                 Signal();
             }
         }
+       
         public ObservableCollection<model.Type> Types // список видов абонемента
 
         {
@@ -94,17 +140,33 @@ namespace HostelProject.mvvm.viewmodel
         public MainPageVM()
         {
             // получение списка абонементов для фильтра
-            AllRooms = new ObservableCollection<Room>(RoomRepository.Instance.GetAllRooms());
+            string sql = "SELECT r.room_id, r.room_number, r.price, r.capacity_id, r.type_id, r.people_count, r.capacity, c.title as capacitytitle, t.title as type FROM rooms r, capacities c, types t WHERE r.capacity_id = c.capacity_id AND r.type_id = t.type_id AND r.del = 0;";
+            AllRooms = new ObservableCollection<Room>(RoomRepository.Instance.GetAllRooms(sql));
             AllRooms.Insert(0, new Room { Id = 0, RoomNumber = "Все номера"});
             SelectedRoom = AllRooms[0];
 
+            string sql3 = "SELECT r.room_id, r.room_number, r.price, r.capacity_id, r.type_id, r.people_count, r.capacity, c.title as capacitytitle, t.title as type FROM rooms r, capacities c, types t WHERE r.capacity_id = c.capacity_id AND r.type_id = t.type_id;";
+            AllAllRooms = new ObservableCollection<Room>(RoomRepository.Instance.GetAllRooms(sql3));
+            AllAllRooms.Insert(0, new Room { Id = 0, RoomNumber = "Все номера" });
+            SelectedRoom = AllAllRooms[0];
+
+            AllMonth = new ObservableCollection<Month>(MonthRepository.Instance.GetAllMonth());
+            AllMonth.Insert(0, new Month { ID = 0 });
+            SelectedInMonth = AllMonth[0];
+
+            AllMonth = new ObservableCollection<Month>(MonthRepository.Instance.GetAllMonth());
+            AllMonth.Insert(0, new Month { ID = 0});
+            SelectedOutMonth = AllMonth[0];
 
             // получение списка всех клиентов
-            string sql = "SELECT g.guest_id, g.name, g.secondname, g.phone_number, g.room_id, g.in_date, g.out_date, r.room_number as room_number FROM guests g, rooms r WHERE g.room_id = r.room_id AND g.out_date Is NULL;";
-            Guests = new ObservableCollection<Guest>(GuestRepository.Instance.GetAllGuests(sql));
+            string sql1 = "SELECT g.guest_id, g.name, g.secondname, g.phone_number, g.room_id, g.in_date, g.out_date, r.room_number as room_number FROM guests g, rooms r WHERE g.room_id = r.room_id AND g.out_date Is NULL;";
+            Guests = new ObservableCollection<Guest>(GuestRepository.Instance.GetAllGuests(sql1));
+
+            string sql2 = "SELECT g.guest_id, g.name, g.secondname, g.phone_number, g.room_id, g.in_date, g.out_date, r.room_number as room_number FROM guests g, rooms r WHERE g.room_id = r.room_id;";
+            AllGuests = new ObservableCollection<Guest>(GuestRepository.Instance.GetAllGuests(sql2));
 
             // получение списка всех тренеро
-            Rooms = new ObservableCollection<Room>(RoomRepository.Instance.GetAllRooms());
+            Rooms = new ObservableCollection<Room>(RoomRepository.Instance.GetAllRooms(sql));
 
             // получение списка всех видов абонемента
             Types = new ObservableCollection<model.Type>(TypeRepository.Instance.GetAllTypes());
@@ -166,7 +228,7 @@ namespace HostelProject.mvvm.viewmodel
                     RoomRepository.Instance.UpdatePeopleCountMinus(SelectedRoom);
 
                     // обновление списка тренеров
-                    Rooms = new ObservableCollection<Room>(RoomRepository.Instance.GetAllRooms());
+                    Rooms = new ObservableCollection<Room>(RoomRepository.Instance.GetAllRooms(sql));
                 }
             });
 
@@ -212,6 +274,18 @@ namespace HostelProject.mvvm.viewmodel
             // список клиентов после фильтрации или поиска
             Guests = new ObservableCollection<Guest>(
                 GuestRepository.Instance.Search(SearchText, SelectedRoom));
+        }
+        private void SearchMonth()
+        {
+            // список клиентов после фильтрации или поиска
+            AllGuests = new ObservableCollection<Guest>(
+                GuestRepository.Instance.SearchMonth(SearchText, SelectedRoom, SelectedInMonth));
+        }
+        private void SearchOutMonth()
+        {
+            // список клиентов после фильтрации или поиска
+            AllGuests = new ObservableCollection<Guest>(
+                GuestRepository.Instance.SearchOutMonth(SearchText, SelectedRoom, SelectedOutMonth));
         }
     }
 }

@@ -171,5 +171,51 @@ namespace HostelProject.mvvm.model
                 return null;
             }
         }
+
+        internal IEnumerable<Guest> SearchMonth(string searchText, Room selectedRoom, Month selectedMonth)
+        {
+            try
+            {
+                string sql = "SELECT g.guest_id, g.name, g.secondname, g.phone_number, g.room_id, g.in_date, g.out_date, r.room_number as room_number FROM guests g, rooms r WHERE g.room_id = r.room_id";
+                sql += " AND( g.secondname LIKE '%" + searchText + "%'";
+                sql += " OR g.phone_number LIKE '%" + searchText + "%')";
+                if (selectedRoom != null && selectedRoom.Id != 0)
+                    sql += " AND g.room_id = " + selectedRoom.Id;
+                if (selectedMonth != null && selectedMonth.ID != 0)
+                    sql += " AND MONTH(g.in_date) = " + selectedMonth.ID;
+                
+                sql += " ORDER BY g.guest_id;";
+
+                return GetAllGuests(sql);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+        }
+
+        internal IEnumerable<Guest> SearchOutMonth(string searchText, Room selectedRoom, Month selectedMonth)
+        {
+            try
+            {
+                string sql = "SELECT g.guest_id, g.name, g.secondname, g.phone_number, g.room_id, g.in_date, g.out_date, r.room_number as room_number FROM guests g, rooms r WHERE g.room_id = r.room_id";
+
+                sql += " AND( g.secondname LIKE '%" + searchText + "%'";
+                sql += " OR g.phone_number LIKE '%" + searchText + "%')";
+                if (selectedRoom != null && selectedRoom.Id != 0)
+                    sql += " AND g.room_id = " + selectedRoom.Id;
+                if (selectedMonth != null && selectedMonth.ID != 0)
+                    sql += " AND MONTH(g.out_date) = " + selectedMonth.ID;
+                sql += " ORDER BY g.guest_id;";
+
+                return GetAllGuests(sql);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+        }
     }
 }

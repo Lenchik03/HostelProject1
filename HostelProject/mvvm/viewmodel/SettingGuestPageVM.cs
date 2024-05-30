@@ -42,7 +42,8 @@ namespace HostelProject.mvvm.viewmodel
         public SettingGuestPageVM()
         {
             // получение списка абонементов
-            AllRooms = (List<Room>?)RoomRepository.Instance.GetAllRooms();
+            string sql = "SELECT r.room_id, r.room_number, r.price, r.capacity_id, r.type_id, r.people_count, r.capacity, c.title as capacitytitle, t.title as type FROM rooms r, capacities c, types t WHERE r.capacity_id = c.capacity_id AND r.type_id = t.type_id AND r.del = 0 AND r.capacity != r.people_count;";
+            AllRooms = (List<Room>?)RoomRepository.Instance.GetAllRooms(sql);
 
             //команда на добавление в базу или обновление клиента в базе
             Save = new VmCommand(() => {

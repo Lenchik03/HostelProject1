@@ -32,6 +32,7 @@
             ItemsSource="{Binding AllRooms}"/>
                         </StackPanel>
                         
+
                     </StackPanel>
                     <StackPanel Grid.Row="2">
                         <ListView ItemsSource="{Binding Guests}" SelectedItem="{Binding SelectedGuest}">
@@ -95,6 +96,55 @@
                         <Button Content="Редактировать тип" Command="{Binding EditType}" Margin="5"/>
                         <Button Content="Удалить тип" Command="{Binding DeleteType}" Margin="5"/>
                     </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="История">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <StackPanel Margin="3">
+                            <TextBlock Text="Поиск по фамилии или номеру телефона" />
+                            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel Margin="3">
+                            <TextBlock Text="Фильтрация по номеру комнаты"/>
+                            <ComboBox DisplayMemberPath="RoomNumber"
+            SelectedItem="{Binding SelectedRoom}" 
+            ItemsSource="{Binding AllAllRooms}"/>
+                        </StackPanel>
+                        <StackPanel Margin="3">
+                            <TextBlock Text="Фильтрация по дате заселения"/>
+                            <ComboBox DisplayMemberPath="ID"
+SelectedItem="{Binding SelectedInMonth}" 
+ItemsSource="{Binding AllMonth}"/>
+                        </StackPanel>
+                        <StackPanel Margin="3">
+                            <TextBlock Text="Фильтрация по дате выселения"/>
+                            <ComboBox DisplayMemberPath="ID"
+SelectedItem="{Binding SelectedOutMonth}" 
+ItemsSource="{Binding AllMonth}"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                    <StackPanel Grid.Row="2">
+                        <ListView ItemsSource="{Binding AllGuests}" SelectedItem="{Binding SelectedGuest}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding Name}"/>
+                                    <GridViewColumn Header="Фамилия" DisplayMemberBinding="{Binding SecondName}" />
+                                    <GridViewColumn Header="Номер телефона" DisplayMemberBinding="{Binding PhoneNumber}"/>
+                                    <GridViewColumn Header="Номер комнаты"  DisplayMemberBinding="{Binding RoomNumber}"/>
+                                    <GridViewColumn Header="Дата вселения" DisplayMemberBinding="{Binding InDate, StringFormat=dd.MM.yyyy}"/>
+                                    <GridViewColumn Header="Дата выселения" DisplayMemberBinding="{Binding OutDate, StringFormat=dd.MM.yyyy}"/>
+
+
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        
+                    </StackPanel>
+
+
+
                 </StackPanel>
             </TabItem>
         </TabControl>

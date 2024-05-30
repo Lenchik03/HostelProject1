@@ -23,13 +23,13 @@ namespace HostelProject.mvvm.model
         }
 
         // запрос на чтение всех клиентов с БД
-        internal IEnumerable<Room> GetAllRooms()
+        internal IEnumerable<Room> GetAllRooms(string sql)
         {
             var result = new List<Room>();
             var connect = MySqlDB.Instance.GetConnection();
             if (connect == null)
                 return result;
-            string sql = "SELECT r.room_id, r.room_number, r.price, r.capacity_id, r.type_id, r.people_count, r.capacity, c.title as capacitytitle, t.title as type FROM rooms r, capacities c, types t WHERE r.capacity_id = c.capacity_id AND r.type_id = t.type_id AND r.del = 0;";
+            
             using (var mc = new MySqlCommand(sql, connect))
             using (var reader = mc.ExecuteReader())
             {
